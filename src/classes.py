@@ -1,5 +1,5 @@
 class Product:
-    """..."""
+    """Класс 'Продукт'"""
 
     name: str
     description: str
@@ -14,7 +14,7 @@ class Product:
 
 
 class Category:
-    """..."""
+    """Класс 'Категория'"""
 
     name: str
     description: str
