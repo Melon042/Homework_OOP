@@ -10,7 +10,7 @@ def reset_category_counters():
 
 
 def test_product_initialization():
-    product = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет",  70000.0, 5)
+    product = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет", 70000.0, 5)
     assert product.name == "Samsung Galaxy S23 Ultra"
     assert product.description == "256GB, Серый цвет"
     assert product.price == 70000.0

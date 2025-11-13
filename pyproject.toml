@@ -11,7 +11,8 @@ dependencies = [
     "pytest (>=9.0.1,<10.0.0)",
     "black (>=25.11.0,<26.0.0)",
     "flake8 (>=7.3.0,<8.0.0)",
-    "isort (>=7.0.0,<8.0.0)"
+    "isort (>=7.0.0,<8.0.0)",
+    "pytest-cov (>=7.0.0,<8.0.0)"
 ]
 
 
@@ -42,5 +43,3 @@ exclude = '''
 )
 '''
 
-[tool.flake8]
-max-line-length = 119
