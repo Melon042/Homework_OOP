@@ -1,5 +1,6 @@
 import pytest
 from src.classes import Product, Category
+from unittest.mock import patch
 
 
 @pytest.fixture(autouse=True)
@@ -79,12 +80,18 @@ def test_product_price_setter_zero_or_negative(capsys):
 
 
 def test_product_price_setter_lower_price():
-    """Тест понижения цены с ручным подтверждением"""
+    """Тест понижения цены с имитацией ввода"""
     product = Product("Телефон", "Тестовый", 10000.0, 1)
 
-    product.price = 8000.0
+    with patch('builtins.input', return_value='n'):
+        product.price = 8000.0
+    assert product.price == 10000.0
 
+    with patch('builtins.input', return_value='y'):
+        product.price = 8000.0
     assert product.price == 8000.0
+
+
 
 
 def test_new_product_merge_existing():
