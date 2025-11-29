@@ -1,3 +1,9 @@
+from itertools import product
+from operator import index
+
+from unicodedata import category
+
+
 class Product:
     """Класс 'Продукт'"""
 
@@ -13,6 +19,15 @@ class Product:
             raise ValueError("Цена не должна быть нулевая или отрицательная")
         self.__price = price
         self.quantity = quantity
+
+    def __str__(self):
+        """Строковое отображение в формате: <{Название продукта}, {N} руб. Остаток: {N} шт.>"""
+        return f'{self.name}, {self.__price} руб. Остаток: {self.quantity} шт.'
+
+    def __add__(self, other):
+        """Возвращает общую стоимость складываемых товаров с учетом их количества"""
+        result = self.__price * self.quantity + other.__price * other.quantity
+        return result
 
     @classmethod
     def new_product(cls, product_data: dict, old_products: list = None):
@@ -71,6 +86,14 @@ class Category:
         Category.category_count += 1
         Category.product_count += len(products)
 
+    def __str__(self):
+        """Строковое отображение в формате: <{Название категории}, количество продуктов: {N} шт.>"""
+        total_products_count = 0
+        for product in self.__products:
+            total_products_count += product.quantity
+
+        return f'{self.name}, количество продуктов: {total_products_count} шт.'
+
 
     def add_product(self, product):
         """Добавляет объект класса Product в список товаров категории"""
@@ -83,6 +106,25 @@ class Category:
         """Возвращает список строк товаров объекта Product"""
         products = []
         for product in self.__products:
-            products.append(f'{product.name}, {product.price} руб. Остаток: {product.quantity} шт.')
+            products.append(str(product))
 
         return products
+
+
+class CategoryIterator:
+    """Вспомогательный класс для перебора товаров одной категории"""
+
+    def __init__(self, category_obj):
+        self.category_obj = category_obj
+        self.index = 0
+
+    def __iter__(self):
+        return self
+
+    def __next__(self):
+        if self.index < len(self.category_obj.products):
+            product = self.category_obj.products[self.index]
+            self.index += 1
+            return product
+        else:
+            raise StopIteration

@@ -124,3 +124,32 @@ def test_new_product_merge_higher_new_price():
     result = Product.new_product(new_data, old_products=[existing])
     assert result.price == 7000.0
     assert result.quantity == 6
+
+def test_product_add():
+    """Тест магического метода __add__ в классе Product"""
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+
+    result = product1 + product2
+
+    assert result == 2580000.0
+
+def test_product_str():
+    """Тест строкового отображения объекта класса Product"""
+    product = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+
+    assert str(product) == 'Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.'
+
+def test_category_str():
+    """Тест строкового отображения объекта класса Category"""
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 210000.0, 8)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 31000.0, 14)
+
+    category = Category(
+        "Смартфоны",
+        "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
+        [product1, product2, product3]
+    )
+
+    assert str(category) == 'Смартфоны, количество продуктов: 27 шт.'
