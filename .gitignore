@@ -198,3 +198,7 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Coverage reports
+htmlcov/
+!htmlcov/index.html
