@@ -1,5 +1,5 @@
 import pytest
-from src.classes import Product, Category
+from src.classes import Product, Category, Smartphone, LawnGrass
 from unittest.mock import patch
 
 
@@ -21,12 +21,7 @@ def test_product_initialization():
 
 def test_new_product_from_dict():
     """Тест создания продукта из словаря"""
-    data = {
-        "name": "Ноутбук",
-        "description": "Игровой ноутбук",
-        "price": 150000.0,
-        "quantity": 10
-    }
+    data = {"name": "Ноутбук", "description": "Игровой ноутбук", "price": 150000.0, "quantity": 10}
     product = Product.new_product(data)
     assert product.name == "Ноутбук"
     assert product.description == "Игровой ноутбук"
@@ -42,8 +37,10 @@ def test_category_initialization():
 
     assert category.name == "Смартфоны"
     assert category.description == "Новые смартфоны"
-    assert category.products == ["Samsung Galaxy S23 Ultra, 70000.0 руб. Остаток: 5 шт.",
-                                 "Iphone 15, 200000.0 руб. Остаток: 8 шт."]
+    assert category.products == [
+        "Samsung Galaxy S23 Ultra, 70000.0 руб. Остаток: 5 шт.",
+        "Iphone 15, 200000.0 руб. Остаток: 8 шт.",
+    ]
 
 
 def test_category_product_count():
@@ -83,26 +80,19 @@ def test_product_price_setter_lower_price():
     """Тест понижения цены с имитацией ввода"""
     product = Product("Телефон", "Тестовый", 10000.0, 1)
 
-    with patch('builtins.input', return_value='n'):
+    with patch("builtins.input", return_value="n"):
         product.price = 8000.0
     assert product.price == 10000.0
 
-    with patch('builtins.input', return_value='y'):
+    with patch("builtins.input", return_value="y"):
         product.price = 8000.0
     assert product.price == 8000.0
-
-
 
 
 def test_new_product_merge_existing():
     """Тест объединения при наличии дубликата по имени"""
     existing = Product("Смартфон", "Старое описание", 20000.0, 3)
-    new_data = {
-        "name": "Смартфон",
-        "description": "Новое описание",
-        "price": 18000.0,
-        "quantity": 5
-    }
+    new_data = {"name": "Смартфон", "description": "Новое описание", "price": 18000.0, "quantity": 5}
 
     result = Product.new_product(new_data, old_products=[existing])
 
@@ -114,16 +104,12 @@ def test_new_product_merge_existing():
 def test_new_product_merge_higher_new_price():
     """Тест: если новая цена выше — она должна быть установлена"""
     existing = Product("Часы", "Наручные часы", 6000.0, 2)
-    new_data = {
-        "name": "Часы",
-        "description": "Наручные часы",
-        "price": 7000.0,
-        "quantity": 4
-    }
+    new_data = {"name": "Часы", "description": "Наручные часы", "price": 7000.0, "quantity": 4}
 
     result = Product.new_product(new_data, old_products=[existing])
     assert result.price == 7000.0
     assert result.quantity == 6
+
 
 def test_product_add():
     """Тест магического метода __add__ в классе Product"""
@@ -134,11 +120,19 @@ def test_product_add():
 
     assert result == 2580000.0
 
+    smartphone = Smartphone('name', 'description', 123, 1, 'efficiency', 'model', 'memory', 'color')
+    lawngrass = LawnGrass('name', 'description', 123, 1, 'country', '7 days', 'green')
+
+    with pytest.raises(TypeError):
+        _ = smartphone + lawngrass
+
+
 def test_product_str():
     """Тест строкового отображения объекта класса Product"""
     product = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5)
 
-    assert str(product) == 'Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт.'
+    assert str(product) == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+
 
 def test_category_str():
     """Тест строкового отображения объекта класса Category"""
@@ -149,7 +143,65 @@ def test_category_str():
     category = Category(
         "Смартфоны",
         "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
-        [product1, product2, product3]
+        [product1, product2, product3],
     )
 
-    assert str(category) == 'Смартфоны, количество продуктов: 27 шт.'
+    assert str(category) == "Смартфоны, количество продуктов: 27 шт."
+
+
+def test_smartphone_initialization():
+    """Тест инициализации объекта Smartphone"""
+    smartphone = Smartphone(
+        name="iPhone 15",
+        description="Смартфон от Apple",
+        price=120000.0,
+        quantity=10,
+        efficiency="Высокая",
+        model="iPhone 15",
+        memory="256 ГБ",
+        color="Черный",
+    )
+
+    assert smartphone.name == "iPhone 15"
+    assert smartphone.description == "Смартфон от Apple"
+    assert smartphone.price == 120000.0
+    assert smartphone.quantity == 10
+    assert smartphone.efficiency == "Высокая"
+    assert smartphone.model == "iPhone 15"
+    assert smartphone.memory == "256 ГБ"
+    assert smartphone.color == "Черный"
+
+
+def test_lawn_grass_initialization():
+    """Тест инициализации объекта LawnGrass"""
+    grass = LawnGrass(
+        name="Трава газонная",
+        description="Семена газонной травы",
+        price=1500.0,
+        quantity=50,
+        country="Россия",
+        germination_period="7 дней",
+        color="Зеленый",
+    )
+
+    assert grass.name == "Трава газонная"
+    assert grass.description == "Семена газонной травы"
+    assert grass.price == 1500.0
+    assert grass.quantity == 50
+    assert grass.country == "Россия"
+    assert grass.germination_period == "7 дней"
+    assert grass.color == "Зеленый"
+
+
+def test_smartphone_is_instance_of_product():
+    """Проверяем, что Smartphone — это подкласс Product"""
+    smartphone = Smartphone("Iphone 15", "Смартфон от Apple", 80000, 1, "Высокая", "Iphone 15", "256 ГБ", "Черный")
+    assert isinstance(smartphone, Smartphone)
+    assert isinstance(smartphone, Product)
+
+
+def test_lawn_grass_is_instance_of_product():
+    """Проверяем, что LawnGrass — это подкласс Product"""
+    grass = LawnGrass("Test", "Test", 100, 5, "Россия", "7 дней", "Зеленый")
+    assert isinstance(grass, LawnGrass)
+    assert isinstance(grass, Product)
