@@ -1,9 +1,3 @@
-from itertools import product
-from operator import index
-
-from unicodedata import category
-
-
 class Product:
     """Класс 'Продукт'"""
 
@@ -22,12 +16,15 @@ class Product:
 
     def __str__(self):
         """Строковое отображение в формате: <{Название продукта}, {N} руб. Остаток: {N} шт.>"""
-        return f'{self.name}, {self.__price} руб. Остаток: {self.quantity} шт.'
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
 
     def __add__(self, other):
-        """Возвращает общую стоимость складываемых товаров с учетом их количества"""
-        result = self.__price * self.quantity + other.__price * other.quantity
-        return result
+        """Возвращает общую стоимость складываемых товаров одного класса с учетом их количества"""
+        if type(self) == type(other):
+            result = self.__price * self.quantity + other.__price * other.quantity
+            return result
+        else:
+            raise TypeError
 
     @classmethod
     def new_product(cls, product_data: dict, old_products: list = None):
@@ -35,10 +32,10 @@ class Product:
         if old_products is None:
             old_products = []
 
-        name = product_data['name']
-        description = product_data['description']
-        price = product_data['price']
-        quantity = product_data['quantity']
+        name = product_data["name"]
+        description = product_data["description"]
+        price = product_data["price"]
+        quantity = product_data["quantity"]
 
         new_product = cls(name, description, price, quantity)
 
@@ -59,11 +56,11 @@ class Product:
     def price(self, value):
         """Присваивает новую цену с проверкой корректности значения"""
         if value <= 0:
-            print('Цена не должна быть нулевая или отрицательная')
+            print("Цена не должна быть нулевая или отрицательная")
         else:
             if value < self.__price:
                 answer = input('Новая цена ниже предыдущей, введите "y" для подтверждения или "n" для отмены.')
-                if answer == 'y':
+                if answer == "y":
                     self.__price = value
             else:
                 self.__price = value
@@ -92,14 +89,15 @@ class Category:
         for product in self.__products:
             total_products_count += product.quantity
 
-        return f'{self.name}, количество продуктов: {total_products_count} шт.'
-
+        return f"{self.name}, количество продуктов: {total_products_count} шт."
 
     def add_product(self, product):
         """Добавляет объект класса Product в список товаров категории"""
-        self.__products.append(product)
-        Category.product_count += 1
-
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            raise TypeError
 
     @property
     def products(self):
@@ -128,3 +126,33 @@ class CategoryIterator:
             return product
         else:
             raise StopIteration
+
+
+class Smartphone(Product):
+    """Подкласс класса Product 'Смартфон'"""
+
+    efficiency: str
+    model: str
+    memory: str
+    color: str
+
+    def __init__(self, name, description, price, quantity, efficiency, model, memory, color):
+        super().__init__(name, description, price, quantity)
+        self.efficiency = efficiency
+        self.model = model
+        self.memory = memory
+        self.color = color
+
+
+class LawnGrass(Product):
+    """Подкласс класса Product 'Трава газонная'"""
+
+    country: str
+    germination_period: str
+    color: str
+
+    def __init__(self, name, description, price, quantity, country, germination_period, color):
+        super().__init__(name, description, price, quantity)
+        self.country = country
+        self.germination_period = germination_period
+        self.color = color

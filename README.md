@@ -12,6 +12,7 @@ git clone https://github.com/Melon042/Homework_OOP.git
 * Функция get_category_objects_from_json_file(path_to_json_file):
   #Принимает путь до JSON-файла и возвращает список объектов класса Category.
 * Созданы классы Product и Category.
+* Созданы подклассы класса Product - Smartphone и LawnGrass
 
 ## Использование:
 
