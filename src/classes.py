@@ -1,4 +1,49 @@
-class Product:
+from abc import ABC, abstractmethod
+
+
+class BaseProduct(ABC):
+    """Базовый абстрактный класс для продуктов"""
+
+    name: str
+    description: str
+    __price: float
+    quantity: int
+
+    @abstractmethod
+    def __init__(self):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        """Строковое отображение в формате: <{Название продукта}, {N} руб. Остаток: {N} шт.>"""
+        pass
+
+    @abstractmethod
+    def __add__(self, other):
+        """Возвращает общую стоимость складываемых товаров одного класса с учетом их количества"""
+        pass
+
+    @property
+    @abstractmethod
+    def price(self):
+        """Возвращает цену объекта Product"""
+        return self.__price
+
+    @price.setter
+    @abstractmethod
+    def price(self, value):
+        """Присваивает новую цену с проверкой корректности значения"""
+
+
+class MixinInit:
+    """При '__init__' печатает в консоль информацию от какого класса и с какими параметрами был создан объект."""
+
+    def __init__(self):
+        print(f"Создан объект: {repr(self)}")
+        super().__init__()
+
+
+class Product(MixinInit, BaseProduct):
     """Класс 'Продукт'"""
 
     name: str
@@ -13,6 +58,12 @@ class Product:
             raise ValueError("Цена не должна быть нулевая или отрицательная")
         self.__price = price
         self.quantity = quantity
+
+        super().__init__()
+
+    def __repr__(self):
+        """Строковое отображение в формате: ClassName('name', 'description', price, quantity)"""
+        return f"{self.__class__.__name__}('{self.name}', '{self.description}', {self.__price}, {self.quantity})"
 
     def __str__(self):
         """Строковое отображение в формате: <{Название продукта}, {N} руб. Остаток: {N} шт.>"""

@@ -120,8 +120,8 @@ def test_product_add():
 
     assert result == 2580000.0
 
-    smartphone = Smartphone('name', 'description', 123, 1, 'efficiency', 'model', 'memory', 'color')
-    lawngrass = LawnGrass('name', 'description', 123, 1, 'country', '7 days', 'green')
+    smartphone = Smartphone("name", "description", 123, 1, "efficiency", "model", "memory", "color")
+    lawngrass = LawnGrass("name", "description", 123, 1, "country", "7 days", "green")
 
     with pytest.raises(TypeError):
         _ = smartphone + lawngrass
@@ -205,3 +205,11 @@ def test_lawn_grass_is_instance_of_product():
     grass = LawnGrass("Test", "Test", 100, 5, "Россия", "7 дней", "Зеленый")
     assert isinstance(grass, LawnGrass)
     assert isinstance(grass, Product)
+
+
+def test_mixininit(capsys):
+    """Проверяем, что класс-миксин 'MixinInit' работает корректно и печатает информацию о созданном объекте"""
+    product = Product("Iphone 15", "Смартфон от Apple", 80000, 2)
+    captured = capsys.readouterr()
+    expected = "Создан объект: Product('Iphone 15', 'Смартфон от Apple', 80000, 2)\n"
+    assert captured.out == expected
