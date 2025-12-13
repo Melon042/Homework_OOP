@@ -202,3 +202,4 @@ __marimo__/
 # Coverage reports
 htmlcov/
 !htmlcov/index.html
+/.coverage
