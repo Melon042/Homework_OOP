@@ -213,3 +213,22 @@ def test_mixininit(capsys):
     captured = capsys.readouterr()
     expected = "Создан объект: Product('Iphone 15', 'Смартфон от Apple', 80000, 2)\n"
     assert captured.out == expected
+
+
+def test_middle_price():
+    """Проверяем корректность работы метода middle_price в классе Category"""
+    product1 = Product("Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 15000.0, 5)
+    product2 = Product("Iphone 15", "512GB, Gray space", 20000.0, 8)
+    product3 = Product("Xiaomi Redmi Note 11", "1024GB, Синий", 10000.0, 14)
+
+    category1 = Category("Смартфоны", "Категория смартфонов", [product1, product2, product3])
+    category2 = Category("Смартфоны", "Категория смартфонов", [])
+
+    assert category1.middle_price() == 15000
+    assert category2.middle_price() == 0
+
+
+def test_zero_quantity_product_initialization():
+    """Проверка возбуждения исключения при попытке создать продукт с нулевым количеством"""
+    with pytest.raises(ValueError, match="Товар с нулевым количеством не может быть добавлен"):
+        product = Product('name', "description", 1000, 0)

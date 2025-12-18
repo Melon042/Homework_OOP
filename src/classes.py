@@ -57,6 +57,8 @@ class Product(MixinInit, BaseProduct):
         if price <= 0:
             raise ValueError("Цена не должна быть нулевая или отрицательная")
         self.__price = price
+        if quantity == 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
         self.quantity = quantity
 
         super().__init__()
@@ -149,6 +151,19 @@ class Category:
             Category.product_count += 1
         else:
             raise TypeError
+
+    def middle_price(self):
+        """Вычисляет среднюю цену всех товаров категории"""
+        products = self.__products
+        total_price = 0
+        for product in products:
+            total_price += product.price
+        try:
+            middle_price = total_price / len(products)
+        except ZeroDivisionError:
+            return 0
+        else:
+            return middle_price
 
     @property
     def products(self):
